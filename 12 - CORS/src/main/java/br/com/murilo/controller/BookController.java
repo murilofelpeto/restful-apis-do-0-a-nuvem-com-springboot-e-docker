@@ -1,4 +1,4 @@
-package br.com.murilo.controller.v2;
+package br.com.murilo.controller;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.murilo.data.vo.v2.BookVO;
+import br.com.murilo.data.vo.BookVO;
 import br.com.murilo.services.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "Books endpoint", description = "This controller is responsible for books table", tags = { "Book" })
 @RestController
-@RequestMapping("/api/book/v2")
-public class BookControllerV2 {
+@RequestMapping("/api/book/v1")
+public class BookController {
 
 	@Autowired
 	private BookService service;
@@ -34,7 +34,7 @@ public class BookControllerV2 {
 	@GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
 	public List<BookVO> findAll() {
 		List<BookVO> books = service.findAll();
-		books.stream().forEach(p -> p.add(linkTo(methodOn(BookControllerV2.class).findById(p.getKey())).withSelfRel()));
+		books.stream().forEach(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel()));
 		return books;
 	}
 
@@ -42,7 +42,7 @@ public class BookControllerV2 {
 	@GetMapping(value = "/{id}", produces = { "application/json", "application/xml", "application/x-yaml" })
 	public BookVO findById(@PathVariable(value = "id") Long id) {
 		BookVO book = service.findById(id);
-		book.add(linkTo(methodOn(BookControllerV2.class).findById(id)).withSelfRel());
+		book.add(linkTo(methodOn(BookController.class).findById(id)).withSelfRel());
 		return book;
 	}
 
@@ -51,7 +51,7 @@ public class BookControllerV2 {
 			"application/json", "application/xml", "application/x-yaml" })
 	public ResponseEntity<BookVO> create(@RequestBody BookVO book) {
 		BookVO entity = service.create(book);
-		entity.add(linkTo(methodOn(BookControllerV2.class).findById(entity.getKey())).withSelfRel());
+		entity.add(linkTo(methodOn(BookController.class).findById(entity.getKey())).withSelfRel());
 		return new ResponseEntity<>(entity, HttpStatus.CREATED);
 	}
 
@@ -60,7 +60,7 @@ public class BookControllerV2 {
 			"application/json", "application/xml", "application/x-yaml" })
 	public BookVO update(@RequestBody BookVO book) {
 		BookVO entity = service.update(book);
-		entity.add(linkTo(methodOn(BookControllerV2.class).findById(entity.getKey())).withSelfRel());
+		entity.add(linkTo(methodOn(BookController.class).findById(entity.getKey())).withSelfRel());
 		return entity;
 	}
 
