@@ -52,8 +52,9 @@ public class FileController {
 	}
 
 	@GetMapping("/downloadFile/{fileName:.+}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName,
+			HttpServletRequest request) {
+		
 		Resource resource = service.loadFileAsResource(fileName);
 
 		String contentType = null;
@@ -61,7 +62,7 @@ public class FileController {
 		try {
 			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
 		} catch (Exception e) {
-			logger.info("Could not determine file type!");
+			logger.info("Could not determine file type");
 		}
 
 		if (contentType == null) {
@@ -71,6 +72,5 @@ public class FileController {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
-
 	}
 }
