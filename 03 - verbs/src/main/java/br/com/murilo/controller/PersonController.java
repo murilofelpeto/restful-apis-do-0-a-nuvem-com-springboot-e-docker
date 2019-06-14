@@ -34,14 +34,14 @@ public class PersonController {
 	public Person create(@RequestBody Person person) {
 		return service.create(person);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Person update(@RequestBody Person person) {
 		return service.update(person);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable("id") String id) {
-		
+
 	}
 }
