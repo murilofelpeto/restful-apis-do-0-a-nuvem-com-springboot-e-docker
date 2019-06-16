@@ -1,13 +1,12 @@
 language: bash
 services: docker
 before_install:
-  - cd 17\ -\ Docker
-  - echo "We are in docker folder"
+  - cd 17\ -\ Docker/
+  - echo "We are in the Docker folder!"
 script:
   - docker-compose build
 before_deploy:
-  - echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" -- password-stdin
-
+  - echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
 deploy:
   provider: script
   script:
@@ -15,5 +14,5 @@ deploy:
     docker push murilofelpeto/rest-with-spring-boot-udemy;
   on:
     branch: master
-notifications: 
+notifications:
   email: false
