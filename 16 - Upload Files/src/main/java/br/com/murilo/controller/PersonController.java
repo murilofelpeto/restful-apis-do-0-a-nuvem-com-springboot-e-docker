@@ -38,6 +38,7 @@ public class PersonController {
 	@Autowired
 	private PersonService service;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "Find all people recorded")
 	@GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
 	public ResponseEntity<PagedResources<PersonVO>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -54,6 +55,7 @@ public class PersonController {
 		return new ResponseEntity<>(assembler.toResource(persons), HttpStatus.OK);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "Find people by name")
 	@GetMapping(value = "/findByName/{firstName}", produces = { "application/json", "application/xml", "application/x-yaml" })
 	public ResponseEntity<PagedResources<PersonVO>> findByName(@PathVariable(value = "firstName") String firstName,

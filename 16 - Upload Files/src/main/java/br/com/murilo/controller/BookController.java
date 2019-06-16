@@ -36,6 +36,7 @@ public class BookController {
 	@Autowired
 	private BookService service;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "Find all books recorded")
 	@GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
 	public ResponseEntity<PagedResources<BookVO>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
