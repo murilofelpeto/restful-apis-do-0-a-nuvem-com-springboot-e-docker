@@ -38,13 +38,12 @@ public class PersonController {
 	@Autowired
 	private PersonService service;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "Find all people recorded")
 	@GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
-	public ResponseEntity<PagedResources<PersonVO>> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+	public ResponseEntity<?> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "12") int limit,
 			@RequestParam(value = "direction", defaultValue = "asc") String direction,
-			PagedResourcesAssembler assembler) {
+			PagedResourcesAssembler<PersonVO> assembler) {
 
 		Direction sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 		Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "firstName"));
@@ -52,17 +51,19 @@ public class PersonController {
 		Page<PersonVO> persons = service.findAll(pageable);
 		persons.stream()
 				.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-		return new ResponseEntity<>(assembler.toResource(persons), HttpStatus.OK);
+		
+        PagedResources<?> resources = assembler.toResource(persons);
+        
+        return ResponseEntity.ok(resources);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "Find people by name")
 	@GetMapping(value = "/findByName/{firstName}", produces = { "application/json", "application/xml", "application/x-yaml" })
-	public ResponseEntity<PagedResources<PersonVO>> findByName(@PathVariable(value = "firstName") String firstName,
+	public ResponseEntity<?> findByName(@PathVariable(value = "firstName") String firstName,
 			@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "12") int limit,
 			@RequestParam(value = "direction", defaultValue = "asc") String direction,
-			PagedResourcesAssembler assembler) {
+			PagedResourcesAssembler<PersonVO> assembler) {
 
 		Direction sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 		Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "firstName"));
@@ -70,7 +71,10 @@ public class PersonController {
 		Page<PersonVO> persons = service.findPersonByName(pageable, firstName);
 		persons.stream()
 				.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-		return new ResponseEntity<>(assembler.toResource(persons), HttpStatus.OK);
+		
+        PagedResources<?> resources = assembler.toResource(persons);
+        
+        return ResponseEntity.ok(resources);
 	}
 
 	// Habilita o Cross somente para este endpoint e apenas para o localhost
