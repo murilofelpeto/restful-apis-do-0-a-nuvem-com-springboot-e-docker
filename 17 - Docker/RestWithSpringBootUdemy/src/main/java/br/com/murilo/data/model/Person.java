@@ -1,4 +1,4 @@
-package br.com.murilo.data.model;
+ package br.com.murilo.data.model;
 
 import java.io.Serializable;
 
