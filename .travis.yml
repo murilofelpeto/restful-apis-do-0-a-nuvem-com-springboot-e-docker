@@ -9,12 +9,12 @@ services: docker
 before_install:
   - sudo apt-get update
   - cd 19\ -\ CI\ no\ AWS/RestWithSpringBootUdemy/
-  - echo "Let s start maven project!"
+  - echo "Let's start Maven Package!"
   - mvn clean package
   - cd ..
-  - echo "We are in Docker folder"
+  - echo "We are in the Docker folder!!!"
 script:
-  - echo "Let's start"
+  - echo "OK Here we GO!"
   - docker-compose build
 before_deploy:
   - echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
@@ -22,7 +22,7 @@ deploy:
   provider: script
   script:
     docker tag rest-with-spring-boot-udemy:latest murilofelpeto/rest-with-spring-boot-udemy:$TRAVIS_JOB_ID;
-    docker push murilofelpeto/udemy-api-rest-with-spring-boot:$TRAVIS_JOB_ID;
+    docker push murilofelpeto/rest-with-spring-boot-udemy:$TRAVIS_JOB_ID;
   on:
     branch: master
 after_success:
@@ -33,7 +33,7 @@ after_success:
   - pip3 -V
   - pip3 uninstall wheel
   - pip3 install wheel
-  - pip install awscli --upgrade --user
+  - pip3 install awscli --upgrade --user
   - export PATH=$PATH:$HOME/.local/bin
   - eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   - docker tag rest-with-spring-boot-udemy:latest $IMAGE_REPO_URL:$TRAVIS_JOB_ID
