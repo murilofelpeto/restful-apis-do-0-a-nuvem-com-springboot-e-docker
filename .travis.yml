@@ -26,9 +26,6 @@ deploy:
   on:
     branch: master
 after_success:
-  - aws configure set aws_access_key_id $AWS_ACCESS_KEY
-  - aws configure set aws_secret_access_key $AWS_SECRET_KEY
-  - aws configure set default.region $AWS_DEFAULT_REGION
   - sudo apt-get -y install python3-pip python-dev
   - sudo pip3 install -U setuptools
   - sudo pip3 install -U virtualenvwrapper
@@ -38,6 +35,9 @@ after_success:
   - pip3 install wheel
   - pip3 install awscli --upgrade --user
   - export PATH=$PATH:$HOME/.local/bin
+  - aws configure set aws_access_key_id $AWS_ACCESS_KEY
+  - aws configure set aws_secret_access_key $AWS_SECRET_KEY
+  - aws configure set default.region $AWS_DEFAULT_REGION
   - eval $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   - docker tag rest-with-spring-boot-udemy:latest $IMAGE_REPO_URL:$TRAVIS_JOB_ID
   - docker push $IMAGE_REPO_URL:$TRAVIS_JOB_ID
